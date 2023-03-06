@@ -43,7 +43,6 @@ namespace Catalog.API.Controllers
                 _logger.LogError($"Product with id: {id}, not found.");
                 return NotFound();
             }
-
             return Ok(product);
         }
 

@@ -2,6 +2,8 @@ using Basket.API.Repositories.Interfaces;
 using Basket.API.Repositories;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Discount.Grpc.Protos;
+using Basket.API.GrpcServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,12 @@ builder.Services.AddStackExchangeRedisCache(options =>
 });
 // General Configuration
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+
+// Grpc Configuration
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
+            (o => o.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
+builder.Services.AddScoped<DiscountGrpcService>();
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
